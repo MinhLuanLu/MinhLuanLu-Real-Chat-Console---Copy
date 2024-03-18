@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/design_join.css') }}">
+    <link rel="stylesheet" href="../static/css/design_index.css">
+    <title>Join CHAT</title>
+</head>
+<body>
+    
+    <form action="{{ url_for('join') }}" method="post">
+        <input type="text" id="username-input" name="username_input" placeholder="Input Username">
+        <input type="submit" value="Join">
+    </form>
+
+</body>
+</html>

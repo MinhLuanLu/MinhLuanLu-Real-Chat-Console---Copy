@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/design_index.css') }}">
+    <link rel="stylesheet" href="../static/css/design_index.css">
+    <script src="https://cdn.socket.io/4.3.1/socket.io.min.js"></script>
+    <title>Chat</title>
+</head>
+<body>
+    <div class="container">
+        <div class="connection-status">
+            <p id="connection_status"></p>
+            <p id="username"></p>
+            
+            
+            
+        </div>
+        <div class="message-container">
+            <!-- Messages will be displayed here -->
+            
+            
+            <p id="conversation"></p>
+            <p id="check_conversation"></p>
+        </div>
+
+        
+        <input type="text" id="message-input" name="message-input" placeholder="Type your message...">
+        <button type="submit" id="send_button">Send</button>
+    
+    </div>
+</body>
+<script>
+    const socket = io();
+
+    socket.on('connection_status', function(get_connection_status){
+        let connection_status = get_connection_status
+        document.getElementById('connection_status').innerHTML = connection_status
+        
+    });
+
+    socket.on('username', function(get_username) {
+    let username = get_username;
+    document.getElementById('username').innerHTML = username;
+
+    });
+
+
+    socket.on('check_CONVERSATION', function(get_check_conversation){
+        let check_conversation = get_check_conversation
+        document.getElementById('check_conversation').innerHTML = check_conversation
+    }); 
+    
+    socket.on('live_CONVERSATION', function(get_conversation) {
+    let conversation = get_conversation;
+    let conversationHTML = '';
+
+    // Loop through each item in the conversation list
+    conversation.forEach(function(item) {
+        // Assuming each item is a string, you can directly append it to the conversationHTML
+        conversationHTML += '<div>' + item + '</div>';
+    });
+
+    document.getElementById('conversation').innerHTML = conversationHTML;
+    });
+
+
+    function getConversation() {
+        // This function will be called when the button is clicked
+        socket.emit('get_conversation'); // Emit an event to request conversation data
+    };
+    
+    document.getElementById('send_button').addEventListener('click', function() {
+        sendMessage(); // Call sendMessage function when the button is clicked
+    });
+
+    function sendMessage() {
+        // Get the value from the input field
+        const message = document.getElementById('message-input').value;
+        // Emit an event to send the message to the server
+        socket.emit('send_message_from_html', message);
+        document.getElementById('message-input').value = ''; // To clear the text in message_input after send message
+    }
+
+    
+    
+    
+</script>
+</html>
